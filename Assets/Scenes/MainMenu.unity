@@ -1891,10 +1891,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a4a2e6e4166f24e5e8ecf04a6397138a, type: 3}
   - {fileID: 8300000, guid: 288805f80eb434df994fbc114a5d9733, type: 3}
   sfxSource: {fileID: 1861959166}
-  meteorDestroySFX: {fileID: 8300000, guid: 2050bfb3400db40a7870650fd8ac1e62, type: 3}
-  winSFX: {fileID: 8300000, guid: 2050bfb3400db40a7870650fd8ac1e62, type: 3}
-  gameOverSFX: {fileID: 8300000, guid: 2050bfb3400db40a7870650fd8ac1e62, type: 3}
-  buttonClickSFX: {fileID: 8300000, guid: 2050bfb3400db40a7870650fd8ac1e62, type: 3}
+  meteorDestroySFX: {fileID: 8300000, guid: 578b74490e908074da453fea9be2b539, type: 3}
+  winSFX: {fileID: 8300000, guid: 7bd6b897eb5ca4b7d88a205c4a51640c, type: 3}
+  gameOverSFX: {fileID: 8300000, guid: df729d213c4be44a9b55cd109f5cd4f9, type: 3}
+  buttonClickSFX: {fileID: 8300000, guid: 6e8772b49f34d402a90016ed445d8a2f, type: 3}
 --- !u!4 &1861959164
 Transform:
   m_ObjectHideFlags: 0
@@ -1922,10 +1922,10 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d93477918a86348d39b7249f46231e3b, type: 3}
   m_Resource: {fileID: 8300000, guid: d93477918a86348d39b7249f46231e3b, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
+  m_PlayOnAwake: 1
+  m_Volume: 0.683
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -2115,7 +2115,7 @@ GameObject:
   - component: {fileID: 1935776828}
   - component: {fileID: 1935776829}
   m_Layer: 5
-  m_Name: Slider
+  m_Name: VolumeSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2193,7 +2193,19 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1007255412}
+        m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
+        m_MethodName: OnVolumeChanged
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1994208653
 GameObject:
   m_ObjectHideFlags: 0

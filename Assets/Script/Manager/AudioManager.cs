@@ -17,6 +17,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip buttonClickSFX;
 
     private const string VolumeKey = "Volume";
+    private float currentVolume = 1f;
+    private bool isMusicPaused = false;
 
     private void Awake()
     {
@@ -35,31 +37,85 @@ public class AudioManager : MonoBehaviour
 
     private void LoadVolume()
     {
-        float volume = PlayerPrefs.GetFloat(VolumeKey, 1f);
-        musicSource.volume = volume;
-        sfxSource.volume = volume;
+        currentVolume = PlayerPrefs.GetFloat(VolumeKey, 1f);
+        UpdateVolume();
     }
 
     public void SetVolume(float volume)
     {
-        musicSource.volume = volume;
-        sfxSource.volume = volume;
+        currentVolume = volume;
+        UpdateVolume();
         PlayerPrefs.SetFloat(VolumeKey, volume);
+    }
+
+    private void UpdateVolume()
+    {
+        musicSource.volume = currentVolume;
+        sfxSource.volume = currentVolume;
     }
 
     public void PlayMainMenuMusic()
     {
-        musicSource.clip = mainMenuMusic;
-        musicSource.loop = true;
-        musicSource.Play();
+        if (musicSource.clip != mainMenuMusic || !musicSource.isPlaying)
+        {
+            musicSource.clip = mainMenuMusic;
+            musicSource.loop = true;
+            musicSource.Play();
+            isMusicPaused = false;
+        }
     }
 
     public void PlayRandomGameplayMusic()
     {
         if (gameplayMusic.Length == 0) return;
-        musicSource.clip = gameplayMusic[Random.Range(0, gameplayMusic.Length)];
+
+        AudioClip selectedClip = gameplayMusic[Random.Range(0, gameplayMusic.Length)];
+        musicSource.clip = selectedClip;
         musicSource.loop = true;
         musicSource.Play();
+        isMusicPaused = false;
+    }
+
+    // Müziði duraklat
+    public void PauseMusic()
+    {
+        if (musicSource.isPlaying)
+        {
+            musicSource.Pause();
+            isMusicPaused = true;
+        }
+    }
+
+    // Müziði devam ettir
+    public void ResumeMusic()
+    {
+        if (isMusicPaused && !musicSource.isPlaying)
+        {
+            musicSource.UnPause();
+            isMusicPaused = false;
+        }
+    }
+
+    // Müziði tamamen durdur
+    public void StopMusic()
+    {
+        musicSource.Stop();
+        isMusicPaused = false;
+    }
+
+    // Gameplay müziðinin çalýp çalmadýðýný kontrol et
+    public bool IsPlayingGameplayMusic()
+    {
+        if (gameplayMusic.Length == 0) return false;
+
+        for (int i = 0; i < gameplayMusic.Length; i++)
+        {
+            if (musicSource.clip == gameplayMusic[i])
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void PlaySFX(AudioClip clip)

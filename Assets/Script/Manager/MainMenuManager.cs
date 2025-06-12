@@ -23,10 +23,12 @@ public class MainMenuManager : MonoBehaviour
 
         AudioManager.Instance.PlayMainMenuMusic();
 
-        volumeSlider.value = PlayerPrefs.GetFloat(VolumeKey, 1f); 
+        // Slider deðerini yükle
+        volumeSlider.value = PlayerPrefs.GetFloat(VolumeKey, 1f);
         vibrationToggle.isOn = PlayerPrefs.GetInt(VibrationKey, 1) == 1;
 
-        AudioListener.volume = volumeSlider.value;
+        // Slider'a listener ekle
+        volumeSlider.onValueChanged.AddListener(OnVolumeChanged);
     }
 
     public void OnPlayButtonPressed()
@@ -52,8 +54,9 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnVolumeChanged(float value)
     {
-        AudioListener.volume = value;
-        PlayerPrefs.SetFloat(VolumeKey, value);
+        // AudioManager üzerinden ses seviyesini ayarla
+        AudioManager.Instance.SetVolume(value);
+        // AudioListener.volume'u kaldýrdýk çünkü çakýþma yapýyor
     }
 
     public void OnVibrationToggled(bool isOn)
