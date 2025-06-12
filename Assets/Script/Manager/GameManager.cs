@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     {
         UpdateUI();
         StartGame();
+        AudioManager.Instance.PlayRandomGameplayMusic();
     }
 
     void InitializeObjectPool()
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
     {
         totalScore += 5;
         UpdateUI();
+        AudioManager.Instance.PlayMeteorDestroySFX();
     }
 
     public void ObstacleFailed()
@@ -165,6 +167,8 @@ public class GameManager : MonoBehaviour
         CancelInvoke();
         ClearAllObstacles();
 
+        AudioManager.Instance.PlayWinSFX();
+
         if (winPanel != null)
         {
             winPanel.SetActive(true);
@@ -181,6 +185,8 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
         CancelInvoke();
         ClearAllObstacles();
+        
+        AudioManager.Instance.PlayGameOverSFX();
 
         if (gameOverPanel != null)
         {
@@ -215,6 +221,7 @@ public class GameManager : MonoBehaviour
 
     public void RestartGame()
     {
+        AudioManager.Instance.PlayButtonClickSFX();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

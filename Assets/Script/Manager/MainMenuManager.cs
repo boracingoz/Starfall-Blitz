@@ -21,6 +21,8 @@ public class MainMenuManager : MonoBehaviour
         menuPanel.SetActive(true);
         settingsPanel.SetActive(false);
 
+        AudioManager.Instance.PlayMainMenuMusic();
+
         volumeSlider.value = PlayerPrefs.GetFloat(VolumeKey, 1f); 
         vibrationToggle.isOn = PlayerPrefs.GetInt(VibrationKey, 1) == 1;
 
@@ -29,18 +31,21 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnPlayButtonPressed()
     {
+        AudioManager.Instance.PlayButtonClickSFX();
         string levelToLoad = PlayerPrefs.HasKey(LastLevelKey) ? PlayerPrefs.GetString(LastLevelKey) : "Level1";
         SceneManager.LoadScene(levelToLoad);
     }
 
     public void OnSettingsButtonPressed()
     {
+        AudioManager.Instance.PlayButtonClickSFX();
         menuPanel.SetActive(false);
         settingsPanel.SetActive(true);
     }
 
     public void OnBackFromSettings()
     {
+        AudioManager.Instance.PlayButtonClickSFX();
         settingsPanel.SetActive(false);
         menuPanel.SetActive(true);
     }
