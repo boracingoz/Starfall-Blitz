@@ -22,7 +22,6 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        // Singleton kur
         if (Instance == null)
         {
             Instance = this;
@@ -76,7 +75,6 @@ public class AudioManager : MonoBehaviour
         isMusicPaused = false;
     }
 
-    // Müziði duraklat
     public void PauseMusic()
     {
         if (musicSource.isPlaying)
@@ -86,7 +84,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // Müziði devam ettir
     public void ResumeMusic()
     {
         if (isMusicPaused && !musicSource.isPlaying)
@@ -96,14 +93,12 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // Müziði tamamen durdur
     public void StopMusic()
     {
         musicSource.Stop();
         isMusicPaused = false;
     }
 
-    // Gameplay müziðinin çalýp çalmadýðýný kontrol et
     public bool IsPlayingGameplayMusic()
     {
         if (gameplayMusic.Length == 0) return false;
@@ -123,7 +118,6 @@ public class AudioManager : MonoBehaviour
         sfxSource.PlayOneShot(clip);
     }
 
-    // Shortcut methods
     public void PlayMeteorDestroySFX() => PlaySFX(meteorDestroySFX);
     public void PlayWinSFX() => PlaySFX(winSFX);
     public void PlayGameOverSFX() => PlaySFX(gameOverSFX);

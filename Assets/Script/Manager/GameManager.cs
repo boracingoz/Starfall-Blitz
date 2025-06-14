@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject winPanel;
     public GameObject pausePanel;
-    public Button pauseButton; // Pause butonu referansý
+    public Button pauseButton; 
 
     private int totalScore = 0;
     private float gameTimer;
@@ -92,14 +92,13 @@ public class GameManager : MonoBehaviour
         InvokeRepeating("SpawnObstacle", currentSpawnRate, currentSpawnRate);
     }
 
-    // PAUSE FUNCTIONALITY
     public void PauseGame()
     {
         if (!gameActive || gamePaused) return;
 
         gamePaused = true;
-        Time.timeScale = 0f; // Oyunu duraklat
-        AudioManager.Instance.PauseMusic(); // Müziði duraklat
+        Time.timeScale = 0f;
+        AudioManager.Instance.PauseMusic();
 
         if (pausePanel != null)
             pausePanel.SetActive(true);
@@ -111,8 +110,8 @@ public class GameManager : MonoBehaviour
 
         AudioManager.Instance.PlayButtonClickSFX();
         gamePaused = false;
-        Time.timeScale = 1f; // Oyunu devam ettir
-        AudioManager.Instance.ResumeMusic(); // Müziði devam ettir
+        Time.timeScale = 1f; 
+        AudioManager.Instance.ResumeMusic(); 
 
         if (pausePanel != null)
             pausePanel.SetActive(false);
@@ -200,7 +199,6 @@ public class GameManager : MonoBehaviour
         CancelInvoke();
         ClearAllObstacles();
 
-        // Müziði durdur ve win SFX çal
         AudioManager.Instance.StopMusic();
         AudioManager.Instance.PlayWinSFX();
 
@@ -223,7 +221,6 @@ public class GameManager : MonoBehaviour
         CancelInvoke();
         ClearAllObstacles();
 
-        // Müziði durdur ve game over SFX çal
         AudioManager.Instance.StopMusic();
         AudioManager.Instance.PlayGameOverSFX();
 
@@ -261,14 +258,13 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         AudioManager.Instance.PlayButtonClickSFX();
-        Time.timeScale = 1f; // Emin olmak için
+        Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    // INPUT CONTROLS
     private void Update()
     {
-        // ESC tuþu ile pause
+        // ESC tu?u ile pause
         if (Input.GetKeyDown(KeyCode.Escape) && gameActive)
         {
             if (gamePaused)
@@ -278,33 +274,35 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // PAUSE BUTTON - UI'dan çaðrýlacak
     public void OnPauseButtonPressed()
     {
         AudioManager.Instance.PlayButtonClickSFX();
         PauseGame();
     }
 
-    // WIN PANEL BUTTONS
     public void OnNextLevelPressed()
     {
         AudioManager.Instance.PlayButtonClickSFX();
-        Time.timeScale = 1f;
 
-        // Mevcut leveli kaydet
         string currentScene = SceneManager.GetActiveScene().name;
-        string nextLevel = GetNextLevelName(currentScene);
 
-        if (!string.IsNullOrEmpty(nextLevel))
+        if (currentScene == "Level4")
         {
-            PlayerPrefs.SetString("LastLevel", nextLevel);
-            SceneManager.LoadScene(nextLevel);
+            SceneManager.LoadScene("End");
         }
         else
         {
-            // Son level ise ana menüye dön
-            Debug.Log("Bu son level! Ana menüye dönülüyor...");
-            SceneManager.LoadScene("MainMenu");
+            
+            if (currentScene.StartsWith("Level"))
+            {
+                string levelNumberStr = currentScene.Substring(5); 
+                if (int.TryParse(levelNumberStr, out int currentLevelNum))
+                {
+                    int nextLevelNum = currentLevelNum + 1;
+                    string nextSceneName = "Level" + nextLevelNum;
+                    SceneManager.LoadScene(nextSceneName);
+                }
+            }
         }
     }
 
@@ -353,7 +351,7 @@ public class GameManager : MonoBehaviour
     // HELPER METHODS
     private string GetNextLevelName(string currentLevel)
     {
-        // Level isimlerini burada tanýmlayýn
+        // Level isimlerini burada tan?mlay?n
         switch (currentLevel)
         {
             case "Level1":
@@ -373,7 +371,7 @@ public class GameManager : MonoBehaviour
     public void MainMenu()
     {
         AudioManager.Instance.PlayButtonClickSFX();
-        Time.timeScale = 1f; // Time scale'i sýfýrla
+        Time.timeScale = 1f; // Time scale'i s?f?rla
         SceneManager.LoadScene("MainMenu");
     }
 }

@@ -599,6 +599,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a42b1ef485250f4488132365eca3d55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playButton: {fileID: 2085048102}
+  levelSceneNames:
+  - Level1
+  - Level2
+  - Level3
   menuPanel: {fileID: 1317114322}
   settingsPanel: {fileID: 1353113695}
   volumeSlider: {fileID: 1935776829}
