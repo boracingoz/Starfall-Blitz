@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject winPanel;
     public GameObject pausePanel;
-    public Button pauseButton; 
+    public Button pauseButton;
 
     private int totalScore = 0;
     private float gameTimer;
@@ -39,12 +39,16 @@ public class GameManager : MonoBehaviour
     private bool gameActive = false;
     private bool gamePaused = false;
 
+    private const string LastLevelKey = "LastLevel";
+
     private void Awake()
     {
         instance = this;
         InitializeObjectPool();
         currentSpawnRate = initialSpawnRate;
         gameTimer = gameDuration;
+
+        SaveCurrentLevel();
     }
 
     private void Start()
@@ -52,6 +56,13 @@ public class GameManager : MonoBehaviour
         UpdateUI();
         StartGame();
         AudioManager.Instance.PlayRandomGameplayMusic();
+    }
+
+    private void SaveCurrentLevel()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+        PlayerPrefs.SetString(LastLevelKey, currentScene);
+        PlayerPrefs.Save();
     }
 
     void InitializeObjectPool()
@@ -110,8 +121,8 @@ public class GameManager : MonoBehaviour
 
         AudioManager.Instance.PlayButtonClickSFX();
         gamePaused = false;
-        Time.timeScale = 1f; 
-        AudioManager.Instance.ResumeMusic(); 
+        Time.timeScale = 1f;
+        AudioManager.Instance.ResumeMusic();
 
         if (pausePanel != null)
             pausePanel.SetActive(false);
@@ -264,7 +275,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // ESC tu?u ile pause
         if (Input.GetKeyDown(KeyCode.Escape) && gameActive)
         {
             if (gamePaused)
@@ -288,18 +298,23 @@ public class GameManager : MonoBehaviour
 
         if (currentScene == "Level4")
         {
+            PlayerPrefs.SetString(LastLevelKey, "Level1");
+            PlayerPrefs.Save();
             SceneManager.LoadScene("End");
         }
         else
         {
-            
             if (currentScene.StartsWith("Level"))
             {
-                string levelNumberStr = currentScene.Substring(5); 
+                string levelNumberStr = currentScene.Substring(5);
                 if (int.TryParse(levelNumberStr, out int currentLevelNum))
                 {
                     int nextLevelNum = currentLevelNum + 1;
                     string nextSceneName = "Level" + nextLevelNum;
+
+                    PlayerPrefs.SetString(LastLevelKey, nextSceneName);
+                    PlayerPrefs.Save();
+
                     SceneManager.LoadScene(nextSceneName);
                 }
             }
@@ -313,7 +328,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    // GAME OVER PANEL BUTTONS
     public void OnTryAgainPressed()
     {
         AudioManager.Instance.PlayButtonClickSFX();
@@ -328,7 +342,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    // PAUSE PANEL BUTTONS
     public void OnResumePressed()
     {
         ResumeGame();
@@ -348,10 +361,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-    // HELPER METHODS
     private string GetNextLevelName(string currentLevel)
     {
-        // Level isimlerini burada tan?mlay?n
         switch (currentLevel)
         {
             case "Level1":
@@ -362,16 +373,15 @@ public class GameManager : MonoBehaviour
                 return "Level4";
             case "Level4":
                 return "Level5";
-            // Daha fazla level ekleyebilirsiniz
             default:
-                return null; // Son level veya bilinmeyen level
+                return null; 
         }
     }
 
     public void MainMenu()
     {
         AudioManager.Instance.PlayButtonClickSFX();
-        Time.timeScale = 1f; // Time scale'i s?f?rla
+        Time.timeScale = 1f; 
         SceneManager.LoadScene("MainMenu");
     }
 }
