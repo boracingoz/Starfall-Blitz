@@ -56,6 +56,12 @@ public class GameManager : MonoBehaviour
         UpdateUI();
         StartGame();
         AudioManager.Instance.PlayRandomGameplayMusic();
+
+        // Banner reklamýný göster
+        if (AdManager.Instance != null)
+        {
+            AdManager.Instance.ShowBannerAd();
+        }
     }
 
     private void SaveCurrentLevel()
@@ -294,6 +300,21 @@ public class GameManager : MonoBehaviour
     {
         AudioManager.Instance.PlayButtonClickSFX();
 
+        // Interstitial reklam göster
+        if (AdManager.Instance != null && AdManager.Instance.IsInterstitialReady())
+        {
+            AdManager.Instance.ShowInterstitialAd(() => {
+                LoadNextLevel();
+            });
+        }
+        else
+        {
+            LoadNextLevel();
+        }
+    }
+
+    private void LoadNextLevel()
+    {
         string currentScene = SceneManager.GetActiveScene().name;
 
         if (currentScene == "Level4")
@@ -331,8 +352,20 @@ public class GameManager : MonoBehaviour
     public void OnTryAgainPressed()
     {
         AudioManager.Instance.PlayButtonClickSFX();
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        // Interstitial reklam göster
+        if (AdManager.Instance != null && AdManager.Instance.IsInterstitialReady())
+        {
+            AdManager.Instance.ShowInterstitialAd(() => {
+                Time.timeScale = 1f;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            });
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 
     public void OnGameOverMainMenuPressed()
@@ -374,14 +407,23 @@ public class GameManager : MonoBehaviour
             case "Level4":
                 return "Level5";
             default:
-                return null; 
+                return null;
         }
     }
 
     public void MainMenu()
     {
         AudioManager.Instance.PlayButtonClickSFX();
-        Time.timeScale = 1f; 
+        Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");
+    }
+
+    private void OnDestroy()
+    {
+        // Banner reklamýný gizle
+        if (AdManager.Instance != null)
+        {
+            AdManager.Instance.HideBannerAd();
+        }
     }
 }
